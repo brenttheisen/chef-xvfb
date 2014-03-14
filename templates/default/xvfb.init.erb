@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Comments to support chkconfig on RedHat Linux
+# chkconfig: 2345 64 36
+# description: A X Windows System virtual framebuffer X server.
 
 XVFB=/usr/bin/Xvfb
 XVFBARGS=":<%= @node[:xvfb][:display] %> -nolisten tcp -fbdir /var/run"
