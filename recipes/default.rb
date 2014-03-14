@@ -1,4 +1,8 @@
-package "xvfb"
+if ["redhat", "centos", "fedora"].include?(node["platform"])
+  package "xorg-x11-server-Xvfb"
+else
+  package "xvfb"
+end
 
 template "/etc/init.d/xvfb" do
   source "xvfb.init.erb"
