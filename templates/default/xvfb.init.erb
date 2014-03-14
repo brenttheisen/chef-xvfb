@@ -4,6 +4,9 @@
 # Comments to support chkconfig on RedHat Linux
 # chkconfig: 2345 64 36
 # description: A X Windows System virtual framebuffer X server.
+
+# Source function library.
+. /etc/rc.d/init.d/functions
 <% end %>
 
 XVFB=/usr/bin/Xvfb
@@ -13,20 +16,22 @@ case "$1" in
   start)
     echo -n "Starting virtual X frame buffer: Xvfb"
     <% if @redhat_platform %>
-    daemon --pidfile="$PIDFILE" "$XVFB $XVFBARGS"
+    daemon --pidfile="$PIDFILE" "$XVFB $XVFBARGS > /dev/null 2>&1 &"
+    echo
     <% else %>
     start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --exec $XVFB -- $XVFBARGS
-    <% end %>
     echo "."
+    <% end %>
     ;;
   stop)
     echo -n "Stopping virtual X frame buffer: Xvfb"
     <% if @redhat_platform %>
-    killproc -p "$PIDFILE" "$XVFB"
+    killproc "$XVFB"
+    echo
     <% else %>
     start-stop-daemon --stop --quiet --pidfile $PIDFILE
-    <% end %>
     echo "."
+    <% end %>
     ;;
   restart)
     $0 stop
